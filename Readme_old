@@ -40,7 +40,7 @@ Donations are always welcome and will help further development of OpenBikeSharin
 If you use Android Studio, you can import the project directly from GitHub.
 
 Otherwise you can build it from the command line with
-[Gradle](https://developer.android.com/sdk/installing/studio-build.html).  
+[Gradle](https://developer.android.com/sdk/installing/studio-build.html).
 Clone the repo and type:
 
     ./gradlew build

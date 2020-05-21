@@ -30,6 +30,7 @@ import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 
+import java.util.Date;
 import java.util.List;
 
 import be.brunoparmentier.openbikesharing.app.BuildConfig;
@@ -90,7 +91,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             versionName = getActivity().getPackageManager()
                     .getPackageInfo(getActivity().getPackageName(), 0).versionName;
             if (BuildConfig.DEBUG) {
-                String buildTime = DateFormat.format("yyyyMMddHHmmdd", new java.util.Date(BuildConfig.BUILD_TIMESTAMP)).toString();
+                String buildTime = DateFormat.format("yyyyMMddHHmmdd", new Date()).toString();
                 versionName += "-debug-" + buildTime;
             }
             versionPref.setSummary(versionName);

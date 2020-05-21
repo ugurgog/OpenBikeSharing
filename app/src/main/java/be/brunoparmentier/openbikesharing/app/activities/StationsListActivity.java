@@ -17,6 +17,7 @@
 
 package be.brunoparmentier.openbikesharing.app.activities;
 
+import android.Manifest;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
@@ -26,12 +27,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.MatrixCursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -112,13 +115,14 @@ public class StationsListActivity extends FragmentActivity implements ActionBar.
     private StationsListFragment nearbyStationsFragment;
 
     private SwipeRefreshLayout refreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stations_list);
 
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-        refreshLayout.setColorSchemeResources(R.color.bike_red,R.color.parking_blue_dark);
+        refreshLayout.setColorSchemeResources(R.color.bike_red, R.color.parking_blue_dark);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -265,7 +269,7 @@ public class StationsListActivity extends FragmentActivity implements ActionBar.
 
         if (jsonDownloadTask != null &&
                 (jsonDownloadTask.getStatus() == AsyncTask.Status.PENDING
-                || jsonDownloadTask.getStatus() == AsyncTask.Status.RUNNING)) {
+                        || jsonDownloadTask.getStatus() == AsyncTask.Status.RUNNING)) {
             setRefreshActionButtonState(true);
 
         }
@@ -380,8 +384,9 @@ public class StationsListActivity extends FragmentActivity implements ActionBar.
             }
         }
     }
+
     //put here the code to update the bikes data
-    private void executeDownloadTask(){
+    private void executeDownloadTask() {
         String networkId = PreferenceManager
                 .getDefaultSharedPreferences(this)
                 .getString(PREF_KEY_NETWORK_ID, "");
@@ -397,7 +402,17 @@ public class StationsListActivity extends FragmentActivity implements ActionBar.
         nearbyStations = new ArrayList<>();
         LocationManager locationManager =
                 (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             final Location userLocation = locationManager
                     .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (userLocation != null) {

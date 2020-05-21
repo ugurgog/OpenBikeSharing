@@ -18,27 +18,22 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 26
     buildToolsVersion '25.0.3'
 
     defaultConfig {
         applicationId "be.brunoparmentier.openbikesharing.app"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 26
         versionCode 23
         versionName "1.10.0"
-        buildConfigField "long", "BUILD_TIMESTAMP", System.currentTimeMillis() + "L"
+        //buildConfigField "long", "BUILD_TIMESTAMP", System.currentTimeMillis() + "L"
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    output.outputFile = new File(output.outputFile.parent, output.outputFile.name.replace("app-release", "openbikesharing-" + defaultConfig.versionName + "-release"))
-                }
-            }
         }
     }
 
@@ -48,7 +43,7 @@ android {
 }
 
 dependencies {
-    compile 'org.osmdroid:osmdroid-android:5.6.4'
-    compile 'com.github.MKergall:osmbonuspack:6.3'
-    compile 'com.android.support:support-v4:23.0.1'
+    implementation 'org.osmdroid:osmdroid-android:5.6.4'
+    implementation 'com.github.MKergall:osmbonuspack:6.3'
+    implementation 'com.android.support:support-v4:26.1.0'
 }
